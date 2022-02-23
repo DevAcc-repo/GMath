@@ -16,21 +16,21 @@ typedef enum { GM_FALSE, GM_TRUE } gmboolean;
 /* ---- Vector data ---- 
 GMath provides functionality for vector procdures. */
 
-typedef union {
+typedef union Vec2 {
 	struct {
 		gmfloat32 x, y;
 	};
 	gmfloat32 data[2];
 } Vec2;
 
-typedef union {
+typedef union Vec3 {
 	struct { 
 		gmfloat32 x, y, z;
 	};
 	gmfloat32 data[3];
 } Vec3;
 
-typedef union {
+typedef union Vec4 {
 	struct {
 		gmfloat32 x, y, z, w;
 	};
@@ -40,7 +40,7 @@ typedef union {
 /* ---- Matrix data ---- 
 GMath provides functionality for matrix procedures. */
 
-typedef union {
+typedef union Mat3x3 {
 	struct {
 		gmfloat32 m00, m01, m02;
 		gmfloat32 m10, m11, m12;
@@ -50,7 +50,7 @@ typedef union {
 	gmfloat32 m[3][3];
 } Mat3x3;
 
-typedef union {
+typedef union Mat4x4 {
 	struct {
 		gmfloat32 m00, m01, m02, m03;
 		gmfloat32 m10, m11, m12, m13;
