@@ -6,36 +6,21 @@
 CC = gcc -m32
 CCFLAGS = -o $(OBJDIR)/$@ -Wall -c $<
 
-# File macros
-TARGET = bin/out
 # NOTE: Object targets go here!
 OBJ = gm_vector.o gm_matrix.o gm_misc.o
-OBJDIR = bin
+OBJDIR = .
 OBJPATH = $(addprefix $(OBJDIR)/, $(OBJ))
 	
 ##############################################################################
 # Build targets
 ##############################################################################
 
-default: libgmath release
-
-# Build debug
-debug: CC += -g -DDEBUG
-debug: $(OBJ) exec
-
-# Build release
-release: CC += -O2
-release: $(OBJ) src/main.c
-	$(CC) -I./ext -L./ext/lib -o bin/release src/main.c -lgmath
-
-# Build executables
-exec: src/main.c
-	$(CC) -o $(TARGET) $< $(OBJPATH);
+default: libgmath clean-obj
 
 # Build libraries
 libgmath: CC += -O2
 libgmath: $(OBJ)
-	ar rcs ext/lib/$@.a $(OBJPATH)
+	ar rcs $@.a $(OBJPATH)
 
 
 ##############################################################################
@@ -56,6 +41,6 @@ gm_misc.o: src/gmath/gm_misc.c src/gmath/gmath.h
 .PHONY: clean clean-obj
 
 clean:
-	rm -f $(OBJDIR)/*.o $(TARGET)
+	rm -f $(OBJDIR)/*.o libgmath.a
 clean-obj:
 	rm -f $(OBJDIR)/*.o

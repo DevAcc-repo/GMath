@@ -134,15 +134,15 @@ Mat4x4 gm_mat4x4_scale(Vec3 vec) {
 	return mat;
 }
 
-/* FIXME: This may or may not work at the moment. Proceed with caution. */
+
 Mat3x3 gm_mat3x3_rotate(gmfloat32 angle) {
 	Mat3x3 mat = gm_mat3x3_identity();
 	gmfloat32 s = sinf(angle);
 	gmfloat32 c = cosf(angle);
 
 	mat.m00 = c;
-	mat.m01 = -s;
-	mat.m10 = s;
+	mat.m10 = -s;
+	mat.m01 = s;
 	mat.m11 = c;
 
 	return mat;
@@ -211,7 +211,7 @@ Mat3x3 gm_mat3x3_mul(Mat3x3 mat, Mat3x3 mat2) {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			for (int k = 0; k < 3; k++) {
-				product.m[i][j] += mat.m[i][k] * mat2.m[k][j];
+				product.m[k][j] += mat.m[k][j] * mat2.m[i][k];
 			}
 		}
 	}
@@ -224,7 +224,7 @@ Mat4x4 gm_mat4x4_mul(Mat4x4 mat, Mat4x4 mat2) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			for (int k = 0; k < 4; k++) {
-				product.m[i][j] += mat.m[i][k] * mat2.m[k][j];
+				product.m[k][j] += mat.m[k][j] * mat2.m[i][k];
 			}
 		}
 	}
@@ -253,7 +253,7 @@ Mat4x4 gm_mat4x4_mul_scalar(Mat4x4 mat, gmfloat32 scalar) {
 Mat3x3 gm_mat3x3_mul_vector(Mat3x3 mat, Vec3 vec) {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			mat.m[i][j] *= vec.data[j];
+			mat.m[i][j] *= vec.data[i];
 		}
 	}
 
