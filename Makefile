@@ -3,7 +3,7 @@
 ##############################################################################
 
 # Compiler macros
-CC = gcc -m32
+CC = gcc
 CCFLAGS = -o $(OBJDIR)/$@ -Wall -c $<
 
 # NOTE: Object targets go here!
