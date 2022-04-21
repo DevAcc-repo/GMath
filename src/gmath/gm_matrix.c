@@ -9,288 +9,235 @@
 /* ---- Set matrices ---- 
 Set matrix data to specified values. */
 
-Mat3x3 gm_mat3x3(gmfloat32 data[9]) {
-	Mat3x3 mat;
-	for (int i = 0; i < 9; i++) {
-		mat.data[i] = data[i];
-	};
-
-	return mat;
-}
-
-Mat4x4 gm_mat4x4(gmfloat32 data[16]) {
-	Mat4x4 mat;
-	for (int i = 0; i < 16; i++) {
-		mat.data[i] = data[i];
-	};
-
-	return mat;
-}
-
-
-Mat3x3 gm_mat3x3v(gmfloat32 val) {
-	Mat3x3 mat;
-	for (int i = 0; i < 9; i++) {
-		mat.data[i] = val;
+void gm_matrix3x3v(matrix3x3 dest, gmfloat val) {
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] = val;
 	}
-
-	return mat;
 }
 
-Mat4x4 gm_mat4x4v(gmfloat32 val) {
-	Mat4x4 mat;
-	for (int i = 0; i < 16; i++) {
-		mat.data[i] = val;
+void gm_matrix4x4v(matrix3x3 dest, gmfloat val) {
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] = val;
 	}
-
-	return mat;
 }
 
 
-Mat3x3 gm_mat3x3vd(gmfloat32 val) {
-	Mat3x3 mat = { .data = { 0.0f } };
-	mat.m[0][0] = val;
-	mat.m[1][1] = val;
-	mat.m[2][2] = val;
-
-	return mat;
+void gm_matrix3x3vd(matrix3x3 dest, gmfloat val) {
+	gm_matrix3x3v(dest, 0.0);
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i + 3 * i] = val;
+	}
 }
 
-Mat4x4 gm_mat4x4vd(gmfloat32 val) {
-	Mat4x4 mat = { .data = { 0.0f } };
-	mat.m[0][0] = val;
-	mat.m[1][1] = val;
-	mat.m[2][2] = val;
-	mat.m[3][3] = val;
-
-	return mat;
+void gm_matrix4x4vd(matrix4x4 dest, gmfloat val) {
+	gm_matrix4x4v(dest, 0.0);
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i + 4 * i] = val;
+	}
 }
 
 /* ---- Generate matrices ----
 Generate matrices using user given values */
 
-Mat4x4 gm_mat4x4_orthographic(gmfloat32 left, gmfloat32 right, gmfloat32 bottom, gmfloat32 top, gmfloat32 near, gmfloat32 far) {
-	Mat4x4 proj = gm_mat4x4_identity();
+void gm_matrix4x4_orthographic(matrix4x4 dest, gmfloat left, gmfloat right, gmfloat bottom, gmfloat top, gmfloat near, gmfloat far) {
+	gm_matrix4x4_identity(dest);
 
-	proj.m00 = 2.0f / (right - left);
-	proj.m11 = 2.0f / (top - bottom);
-	proj.m22 = 2.0f / (near - far);
+	dest[0] = 2.0 / (right - left);
+	dest[5] = 2.0 / (top - bottom);
+	dest[10] = 2.0 / (near - far);
 
-	proj.m03 = (left + right) / (left - right);
-	proj.m13 = (bottom + top) / (bottom - top);
-	proj.m23 = (far + near) / (far - near);
-
-	return proj;
+	dest[3] = (left + right) / (left - right);
+	dest[7] = (bottom + top) / (bottom - top);
+	dest[11] = (far + near) / (far - near);
 }
 
-Mat4x4 gm_mat4x4_perspective(gmfloat32 fov, gmfloat32 aspect, gmfloat32 near, gmfloat32 far) {
-	Mat4x4 proj = gm_mat4x4_identity();
-	gmfloat32 mb11 = 1.0f / tanf(fov * 0.5f);
+void gm_matrix4x4_perspective(matrix4x4 dest, gmfloat fov, gmfloat aspect, gmfloat near, gmfloat far) {
+	gm_matrix4x4_identity(dest);
+	register gmfloat mb11 = 1.0 / tan(fov * 0.5);
 
-	proj.m00 = mb11 / aspect;
-	proj.m11 = mb11;
-	proj.m22 = (near + far) / (near - far);;
-	proj.m32 = -1.0f;
-	proj.m23 = (2.0f * near * far) / (near - far);;
-
-	return proj;
+	dest[0] = mb11 / aspect;
+	dest[5] = mb11;
+	dest[10] = (near + far) / (near - far);
+	dest[11] = (2.0 * near * far) / (near - far);
+	dest[14] = -1.0;
 }
 
 
-Mat3x3 gm_mat3x3_translate(Vec2 vec) {
-	Mat3x3 mat = gm_mat3x3_identity();
-	mat.m02 = vec.x;
-	mat.m12 = vec.y;
-
-	return mat;
+void gm_matrix3x3_translate(matrix3x3 dest, vector2 vec) {
+	gm_matrix3x3_identity(dest);
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[2 + 3 * i] = vec[i];
+	}
 }
 
-Mat4x4 gm_mat4x4_translate(Vec3 vec) {
-	Mat4x4 mat = gm_mat4x4_identity();
-	mat.m03 = vec.x;
-	mat.m13 = vec.y;
-	mat.m23 = vec.z;
-
-	return mat;
+void gm_matrix4x4_translate(matrix4x4 dest, vector3 vec) {
+	gm_matrix4x4_identity(dest);
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[3 + 4 * i] = vec[i];
+	}
 }
 
 
-Mat3x3 gm_mat3x3_scale(Vec2 vec) {
-	Mat3x3 mat = { .data = { 0.0f } };
-	mat.m00 = vec.x;
-	mat.m11 = vec.y;
-	mat.m22 = 1.0f;
-
-	return mat;
+void gm_matrix3x3_scale(matrix3x3 dest, vector2 vec) {
+	gm_matrix3x3_identity(dest);
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i + 3 * 1] = vec[i];
+	}
 }
 
-Mat4x4 gm_mat4x4_scale(Vec3 vec) {
-	Mat4x4 mat = { .data = { 0.0f } };
-	mat.m00 = vec.x;
-	mat.m11 = vec.y;
-	mat.m22 = vec.z;
-	mat.m33 = 1.0f;
-
-	return mat;
+void gm_matrix4x4_scale(matrix4x4 dest, vector3 vec) {
+	gm_matrix4x4_identity(dest);
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i + 4 * 1] = vec[i];
+	}
 }
 
 
-Mat3x3 gm_mat3x3_rotate(gmfloat32 angle) {
-	Mat3x3 mat = gm_mat3x3_identity();
-	gmfloat32 s = sinf(angle);
-	gmfloat32 c = cosf(angle);
+void gm_matrix3x3_rotate(matrix3x3 dest, gmfloat angle) {
+	gm_matrix3x3_identity(dest);
+	register gmfloat s = sin(angle);
+	register gmfloat c = cos(angle);
 
-	mat.m00 = c;
-	mat.m10 = -s;
-	mat.m01 = s;
-	mat.m11 = c;
-
-	return mat;
+	dest[0] = c;
+	dest[1] = -s;
+	dest[3] = s;
+	dest[4] = c;
 }
 
-Mat4x4 gm_mat4x4_rotate(gmfloat32 angle, Vec3 axis) {
-	Mat4x4 mat = gm_mat4x4_identity();
-	gmfloat32 s = sinf(angle);
-	gmfloat32 c = cosf(angle);
-	gmfloat32 omc = 1.0f - c;
+void gm_matrix4x4_rotate(matrix4x4 dest, gmfloat angle, vector3 axis) {
+	gm_matrix4x4_identity(dest);
+	register gmfloat s = sin(angle);
+	register gmfloat c = cos(angle);
+	register gmfloat omc = 1.0 - c;
 
-	mat.m00 = axis.x * omc + c;
-	mat.m10 = axis.y * axis.x * omc + axis.z * s;
-	mat.m20 = axis.x * axis.z * omc - axis.y * s;
+	/* TODO: Could be further optimized? */
+	dest[0] = axis[0] * omc + c;
+	dest[1] = axis[0] * axis[1] * omc - axis[2] * s;
+	dest[2] = axis[0] * axis[2] * omc + axis[1] * s;
 
-	mat.m01 = axis.x * axis.y * omc - axis.z * s;
-	mat.m11 = axis.y * omc + c;
-	mat.m21 = axis.y * axis.z * omc + axis.x * s;
+	dest[4] = axis[1] * axis[0] * omc + axis[2] * s;
+	dest[5] = axis[1] * omc + c;
+	dest[6] = axis[1] * axis[2] * omc - axis[0] * s;
 
-	mat.m02 = axis.x * axis.z * omc + axis.y * s;
-	mat.m12 = axis.y * axis.z * omc - axis.x * s;
-	mat.m22 = axis.z * omc + c;
-
-	return mat;
+	dest[8] = axis[0] * axis[2] * omc - axis[1] * s;
+	dest[9] = axis[1] * axis[2] * omc + axis[0] * s;
+	dest[10] = axis[2] * omc + c;
 }
 
 /* ---- Matrix arithmetic ----
 Modify properties of matrices using mathematics. */
 
-Mat3x3 gm_mat3x3_add(Mat3x3 mat, Mat3x3 mat2) {
-	for (int i = 0; i < 9; i++) {
-		mat.data[i] += mat2.data[i];
+void gm_matrix3x3_add(matrix3x3 dest, matrix3x3 mat) {
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] += mat[i];
 	}
-
-	return mat;
 }
 
-Mat4x4 gm_mat4x4_add(Mat4x4 mat, Mat4x4 mat2) {
-	for (int i = 0; i < 16; i++) {
-		mat.data[i] += mat2.data[i];
+void gm_matrix4x4_add(matrix4x4 dest, matrix4x4 mat) {
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] += mat[i];
 	}
-
-	return mat;
 }
 
 
-Mat3x3 gm_mat3x3_sub(Mat3x3 mat, Mat3x3 mat2) {
-	for (int i = 0; i < 9; i++) {
-		mat.data[i] -= mat2.data[i];
+void gm_matrix3x3_sub(matrix3x3 dest, matrix3x3 mat) {
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] -= mat[i];
 	}
-
-	return mat;
 }
 
-Mat4x4 gm_mat4x4_sub(Mat4x4 mat, Mat4x4 mat2) {
-	for (int i = 0; i < 16; i++) {
-		mat.data[i] -= mat2.data[i];
+void gm_matrix4x4_sub(matrix4x4 dest, matrix4x4 mat) {
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] -= mat[i];
 	}
-
-	return mat;
 }
 
 
-Mat3x3 gm_mat3x3_mul(Mat3x3 mat, Mat3x3 mat2) {
-	Mat3x3 product = { .data = { 0.0f } };
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 3; k++) {
-				product.m[k][j] += mat.m[k][j] * mat2.m[i][k];
+void gm_matrix3x3_mul(matrix3x3 dest, matrix3x3 mat) {
+	matrix3x3 product = { 0.0f };
+	for (unsigned char i = 0; i < 3; i++) {
+		for (unsigned char j = 0; j < 3; j++) {
+			for (unsigned char k = 0; k < 3; k++) {
+				product[i + 3 * j] += dest[i + 3 * k] * mat[k + 3 * j];
 			}
 		}
 	}
 
-	return product;
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] = product[i];
+	}
 }
 
-Mat4x4 gm_mat4x4_mul(Mat4x4 mat, Mat4x4 mat2) {
-	Mat4x4 product = { .data = { 0.0f } };
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			for (int k = 0; k < 4; k++) {
-				product.m[k][j] += mat.m[k][j] * mat2.m[i][k];
+void gm_matrix4x4_mul(matrix4x4 dest, matrix4x4 mat) {
+	matrix4x4 product = { 0.0f };
+	for (unsigned char i = 0; i < 4; i++) {
+		for (unsigned char j = 0; j < 4; j++) {
+			for (unsigned char k = 0; k < 4; k++) {
+				product[i + 4 * j] += dest[i + 4 * k] * mat[k + 4 * j];
 			}
 		}
 	}
 
-	return product;
-}
-
-
-Mat3x3 gm_mat3x3_mul_scalar(Mat3x3 mat, gmfloat32 scalar) {
-	for (int i = 0; i < 9; i++) {
-		mat.data[i] *= scalar;
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] = product[i];
 	}
-
-	return mat;
 }
 
-Mat4x4 gm_mat4x4_mul_scalar(Mat4x4 mat, gmfloat32 scalar) {
-	for (int i = 0; i < 16; i++) {
-		mat.data[i] *= scalar;
+
+void gm_matrix3x3_mul_scalar(matrix3x3 dest, gmfloat scalar) {
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] *= scalar;
 	}
+}
 
-	return mat;
+void gm_matrix4x4_mul_scalar(matrix4x4 dest, gmfloat scalar) {
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] *= scalar;
+	}
 }
 
 
-Mat3x3 gm_mat3x3_mul_vector(Mat3x3 mat, Vec3 vec) {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			mat.m[i][j] *= vec.data[i];
+void gm_matrix3x3_mul_vector(matrix3x3 dest, vector3 vec) {
+	for (unsigned char i = 0; i < 3; i++) {
+		for (unsigned char j = 0; j < 3; j++) {
+			dest[i + 3 * j] *= vec[j];
+		}
+	}
+}
+
+void gm_matrix4x4_mul_vector(matrix4x4 dest, vector4 vec) {
+	for (unsigned char i = 0; i < 4; i++) {
+		for (unsigned char j = 0; j < 4; j++) {
+			dest[i + 4 * j] *= vec[j];
+		}
+	}
+}
+
+
+void gm_matrix3x3_transpose(matrix3x3 dest) {
+	matrix3x3 buf;
+	for (unsigned char i = 0; i < 3; i++) {
+		for (unsigned char j = 0; j < 3; j++) {
+			buf[i + 3 * j] = dest[j + 3 * i];
 		}
 	}
 
-	return mat;
+	for (unsigned char i = 0; i < 9; i++) {
+		dest[i] = buf[i];
+	}
 }
 
-Mat4x4 gm_mat4x4_mul_vector(Mat4x4 mat, Vec4 vec) {
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			mat.m[i][j] *= vec.data[j];
+void gm_matrix4x4_transpose(matrix4x4 dest) {
+	matrix4x4 buf;
+	for (unsigned char i = 0; i < 4; i++) {
+		for (unsigned char j = 0; j < 4; j++) {
+			buf[i + 4 * j] = dest[j + 4 * i];
 		}
 	}
 
-	return mat;
-}
-
-
-Mat3x3 gm_mat3x3_transpose(Mat3x3 mat) {
-	Mat3x3 out;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			out.m[i][j] = mat.m[j][i];
-		}
+	for (unsigned char i = 0; i < 16; i++) {
+		dest[i] = buf[i];
 	}
-
-	return out;
-}
-
-Mat4x4 gm_mat4x4_transpose(Mat4x4 mat) {
-	Mat4x4 out;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			out.m[i][j] = mat.m[j][i];
-		}
-	}
-
-	return out;
 }
 
 /*** end of file ***/

@@ -2,6 +2,8 @@
 
 #include "gmath.h"
 
+#include <stdlib.h>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <float.h>
@@ -9,209 +11,249 @@
 /* ---- Set vectors ---- 
 Set vector data to specified values. */
 
-Vec2 gm_vec2(gmfloat32 x, gmfloat32 y) {
-	return (Vec2) { { x, y } };
+void gm_vector2(vector2 dest, gmfloat x, gmfloat y) {
+	dest[1] = x;
+	dest[2] = y;
 }
 
-Vec3 gm_vec3(gmfloat32 x, gmfloat32 y, gmfloat32 z) {
-	return (Vec3) { { x, y, z } };
+void gm_vector3(vector3 dest, gmfloat x, gmfloat y, gmfloat z) {
+	dest[1] = x;
+	dest[2] = y;
+	dest[3] = z;
 }
 
-Vec4 gm_vec4(gmfloat32 x, gmfloat32 y, gmfloat32 z, gmfloat32 w) {
-	return (Vec4) { { x, y, z, w } };
+void gm_vector4(vector4 dest, gmfloat x, gmfloat y, gmfloat z, gmfloat w) {
+	dest[1] = x;
+	dest[2] = y;
+	dest[3] = z;
+	dest[4] = w;
 }
 
 
-Vec2 gm_vec2v(gmfloat32 val) {
-	return (Vec2) { { val, val } };
+void gm_vector2v(vector2 dest, gmfloat val) {
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] = val;
+	}
 }
 
-Vec3 gm_vec3v(gmfloat32 val) {
-	return (Vec3) { { val, val, val } };
+void gm_vector3v(vector3 dest, gmfloat val) {
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] = val;
+	}
 }
 
-Vec4 gm_vec4v(gmfloat32 val) {
-	return (Vec4) { { val, val, val, val } };
+void gm_vector4v(vector4 dest, gmfloat val) {
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] = val;
+	}
 }
 
-/* ---- Vector arithmetic ----
+/* ---- vector arithmetic ----
 Modify properties of vectors using mathematics. */
 
-Vec2 gm_vec2_add(Vec2 vec, Vec2 vec2) {
-	return (Vec2) { { vec.x + vec2.x, vec.y + vec2.y } };
+void gm_vector2_add(vector2 dest, vector2 vec) {
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] += vec[i];
+	}
 }
 
-Vec3 gm_vec3_add(Vec3 vec, Vec3 vec2) {
-	return (Vec3) { { vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z } };
+void gm_vector3_add(vector3 dest, vector3 vec) {
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] += vec[i];
+	}
 }
 
-Vec4 gm_vec4_add(Vec4 vec, Vec4 vec2) {
-	return (Vec4) { { vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z, vec.w + vec2.w } };
-}
-
-
-Vec2 gm_vec2_sub(Vec2 vec, Vec2 vec2) {
-	return (Vec2) { { vec.x - vec2.x, vec.y - vec2.y } };
-}
-
-Vec3 gm_vec3_sub(Vec3 vec, Vec3 vec2) {
-	return (Vec3) { { vec.x - vec2.x, vec.y - vec2.y, vec.z - vec2.z } };
-}
-
-Vec4 gm_vec4_sub(Vec4 vec, Vec4 vec2) {
-	return (Vec4) { { vec.x - vec2.x, vec.y - vec2.y, vec.z - vec2.z, vec.w - vec2.w } };
+void gm_vector4_add(vector4 dest, vector4 vec) {
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] += vec[i];
+	}
 }
 
 
-Vec2 gm_vec2_mul(Vec2 vec, Vec2 vec2) {
-	return (Vec2) { { vec.x * vec2.x, vec.y * vec2.y } };
+void gm_vector2_sub(vector2 dest, vector2 vec) {
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] -= vec[i];
+	}
 }
 
-Vec3 gm_vec3_mul(Vec3 vec, Vec3 vec2) {
-	return (Vec3) { { vec.x * vec2.x, vec.y * vec2.y, vec.z * vec2.z } };
+void gm_vector3_sub(vector3 dest, vector3 vec) {
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] -= vec[i];
+	}
 }
 
-Vec4 gm_vec4_mul(Vec4 vec, Vec4 vec2) {
-	return (Vec4) { { vec.x * vec2.x, vec.y * vec2.y, vec.z * vec2.z, vec.w * vec2.w } };
-}
-
-
-Vec2 gm_vec2_mul_scalar(Vec2 vec, gmfloat32 scalar) {
-	return (Vec2) { { vec.x * scalar, vec.y * scalar } };
-}
-
-Vec3 gm_vec3_mul_scalar(Vec3 vec, gmfloat32 scalar) {
-	return (Vec3) { { vec.x * scalar, vec.y * scalar, vec.z * scalar } };
-}
-
-Vec4 gm_vec4_mul_scalar(Vec4 vec, gmfloat32 scalar) {
-	return (Vec4) { { vec.x * scalar, vec.y * scalar, vec.z * scalar, vec.w * scalar } };
+void gm_vector4_sub(vector4 dest, vector4 vec) {
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] *= vec[i];
+	}
 }
 
 
-gmfloat32 gm_vec2_dot(Vec2 vec, Vec2 vec2) {
-	gmfloat32 product = 0.0f;
-	for (int i = 0; i < 2; i++) {
-		product += vec.data[i] * vec2.data[i];
+void gm_vector2_mul(vector2 dest, vector2 vec) {
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] *= vec[i];
+	}
+}
+
+void gm_vector3_mul(vector3 dest, vector3 vec) {
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] *= vec[i];
+	}
+}
+
+void gm_vector4_mul(vector4 dest, vector4 vec) {
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] *= vec[i];
+	}
+}
+
+
+void gm_vector2_mul_scalar(vector2 dest, gmfloat scalar) {
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] *= scalar;
+	}
+}
+
+void gm_vector3_mul_scalar(vector3 dest, gmfloat scalar) {
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] *= scalar;
+	}
+}
+
+void gm_vector4_mul_scalar(vector4 dest, gmfloat scalar) {
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] *= scalar;
+	}
+}
+
+
+gmfloat gm_vector2_dot(vector2 dest, vector2 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 2; i++) {
+		product += dest[i] * vec[i];
 	}
 
 	return product;
 }
 
-gmfloat32 gm_vec3_dot(Vec3 vec, Vec3 vec2) {
-	gmfloat32 product = 0.0f;
-	for (int i = 0; i < 3; i++) {
-		product += vec.data[i] * vec2.data[i];
+gmfloat gm_vector3_dot(vector3 dest, vector3 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 3; i++) {
+		product += dest[i] * vec[i];
 	}
 
 	return product;
 }
 
-gmfloat32 gm_vec4_dot(Vec4 vec, Vec4 vec2) {
-	gmfloat32 product = 0.0f;
-	for (int i = 0; i < 4; i++) {
-		product += vec.data[i] * vec2.data[i];
+gmfloat gm_vector4_dot(vector4 dest, vector4 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 4; i++) {
+		product += dest[i] * vec[i];
 	}
 
 	return product;
 }
 
 
-gmfloat32 gm_vec2_cross(Vec2 vec, Vec2 vec2) {
-	return vec.x * vec2.y - vec.y * vec2.x;
+gmfloat gm_vector2_cross(vector2 vec, vector2 vec2) {
+	return vec[0] * vec2[1] - vec[1] * vec2[0];
 }
 
-Vec3 gm_vec3_cross(Vec3 vec, Vec3 vec2) {
-	return (Vec3) { {
-		vec.y * vec2.z - vec.z * vec2.y,
-		vec.z * vec2.x - vec.x * vec2.z,
-		vec.x * vec2.y - vec.y * vec2.x
-	} };
-}
-
-
-gmfloat32 gm_vec2_length_sq(Vec2 vec) {
-	return vec.x * vec.x + vec.y * vec.y;
-}
-
-gmfloat32 gm_vec3_length_sq(Vec3 vec) {
-	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
-}
-
-gmfloat32 gm_vec4_length_sq(Vec4 vec) {
-	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w;
+void gm_vector3_cross(vector3 dest, vector3 vec) {
+	dest[0] = dest[1] * vec[2] - dest[2] * vec[1];
+	dest[1] = dest[2] * vec[0] - dest[0] * vec[2];
+	dest[2] = dest[0] * vec[1] - dest[1] * vec[0];
 }
 
 
-gmfloat32 gm_vec2_length(Vec2 vec) {
-	return sqrtf(gm_vec2_length_sq(vec));
+gmfloat gm_vector2_length_sq(vector2 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 2; i++) {
+		product += vec[i] * vec[i];
+	}
+
+	return product;
 }
 
-gmfloat32 gm_vec3_length(Vec3 vec) {
-	return sqrtf(gm_vec3_length_sq(vec));
+gmfloat gm_vector3_length_sq(vector3 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 3; i++) {
+		product += vec[i] * vec[i];
+	}
+
+	return product;
 }
 
-gmfloat32 gm_vec4_length(Vec4 vec) {
-	return sqrtf(gm_vec4_length_sq(vec));
-}
+gmfloat gm_vector4_length_sq(vector4 vec) {
+	register gmfloat product = 0.0;
+	for (unsigned char i = 0; i < 4; i++) {
+		product += vec[i] * vec[i];
+	}
 
-
-gmfloat32 gm_vec2_distance(Vec2 vec, Vec2 vec2) {
-	Vec2 distance = { {
-		vec.x - vec2.x,
-		vec.y - vec2.y
-	} };
-	
-	return gm_vec2_length(distance);
-}
-
-gmfloat32 gm_vec3_distance(Vec3 vec, Vec3 vec2) {
-	Vec3 distance = { {
-		vec.x - vec2.x,
-		vec.y - vec2.y,
-		vec.z - vec2.z
-	} };
-	
-	return gm_vec3_length(distance);
-}
-
-gmfloat32 gm_vec4_distance(Vec4 vec, Vec4 vec2) {
-	Vec4 distance = { {
-		vec.x - vec2.x,
-		vec.y - vec2.y,
-		vec.z - vec2.z,
-		vec.w - vec2.w
-	} };
-	
-	return gm_vec4_length(distance);
+	return product;
 }
 
 
-Vec2 gm_vec2_normalized(Vec2 vec) {
-	const gmfloat32 length = gm_vec2_length(vec);
-	vec.x /= length;
-	vec.y /= length;
-
-	return vec;
+gmfloat gm_vector2_length(vector2 vec) {
+	return sqrt(gm_vector2_length_sq(vec));
 }
 
-Vec3 gm_vec3_normalized(Vec3 vec) {
-	const gmfloat32 length = gm_vec3_length(vec);
-	vec.x /= length;
-	vec.y /= length;
-	vec.z /= length;
-
-	return vec;
+gmfloat gm_vector3_length(vector3 vec) {
+	return sqrt(gm_vector3_length_sq(vec));
 }
 
-Vec4 gm_vec4_normalized(Vec4 vec) {
-	const gmfloat32 length = gm_vec4_length(vec);
-	vec.x /= length;
-	vec.y /= length;
-	vec.z /= length;
-	vec.w /= length;
+gmfloat gm_vector4_length(vector4 vec) {
+	return sqrt(gm_vector4_length_sq(vec));
+}
 
-	return vec;
+
+gmfloat gm_vector2_distance(vector2 vec, vector2 vec2) {
+	vector2 distance = { 0.0 };
+	for (unsigned char i = 0; i < 2; i++) {
+		distance[i] = vec[i] - vec2[i];
+	}
+
+	return gm_vector2_length(distance);
+}
+
+gmfloat gm_vector3_distance(vector3 vec, vector3 vec2) {
+	vector3 distance = { 0.0 };
+	for (unsigned char i = 0; i < 3; i++) {
+		distance[i] = vec[i] - vec2[i];
+	}
+
+	return gm_vector3_length(distance);
+}
+
+gmfloat gm_vector4_distance(vector4 vec, vector4 vec2) {
+	vector4 distance = { 0.0 };
+	for (unsigned char i = 0; i < 4; i++) {
+		distance[i] = vec[i] - vec2[i];
+	}
+
+	return gm_vector4_length(distance);
+}
+
+
+void gm_vector2_normalized(vector2 dest) {
+	const gmfloat length = gm_vector2_length(dest);
+	for (unsigned char i = 0; i < 2; i++) {
+		dest[i] /= length;
+	}
+}
+
+void gm_vector3_normalized(vector3 dest) {
+	const gmfloat length = gm_vector3_length(dest);
+	for (unsigned char i = 0; i < 3; i++) {
+		dest[i] /= length;
+	}
+}
+
+void gm_vector4_normalized(vector4 dest) {
+	const gmfloat length = gm_vector4_length(dest);
+	for (unsigned char i = 0; i < 4; i++) {
+		dest[i] /= length;
+	}
 }
 
 /*** end of file ***/
