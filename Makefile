@@ -27,11 +27,11 @@ libgmath: $(OBJ)
 # Object targets
 ##############################################################################
 
-gm_vector.o: src/gmath/gm_vector.c src/gmath/gmath.h
+gm_vector.o: src/gm_vector.c include/gmath.h
 	$(CC) $(CCFLAGS)
-gm_matrix.o: src/gmath/gm_matrix.c src/gmath/gmath.h
+gm_matrix.o: src/gm_matrix.c include/gmath.h
 	$(CC) $(CCFLAGS)
-gm_misc.o: src/gmath/gm_misc.c src/gmath/gmath.h
+gm_misc.o: src/gm_misc.c include/gmath.h
 	$(CC) $(CCFLAGS)
 
 ##############################################################################

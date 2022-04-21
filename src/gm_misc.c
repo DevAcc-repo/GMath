@@ -1,6 +1,6 @@
 /* Provide simple mathematic functions involving vectors and matrices for use with OpenGL */
 
-#include "gmath.h"
+#include "../include/gmath.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

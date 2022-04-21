@@ -9,6 +9,10 @@
 #include <math.h>
 #include <float.h>
 
+#ifdef _cplusplus
+	extern "C" {
+#endif
+
 /* ---- Type defines  ----
 Define data types to be used internally by GMath. */
 
@@ -155,6 +159,10 @@ Convert data between variables. */
 
 extern gmfloat gm_conv_deg_rad(gmfloat deg); /* Convert degrees into radians. */
 extern gmfloat gm_conv_rad_deg(gmfloat rad); /* Convert radians into degrees. */
+
+#ifdef _cplusplus
+	}
+#endif
 
 #endif /* GMATH */
 
