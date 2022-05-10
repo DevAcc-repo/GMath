@@ -138,18 +138,18 @@ Compare data between variables. */
 
 #define gm_comp(f1, f2) gm_comp_epsilon(f1, f2, FLT_EPSILON) /* Compare two floating point variables. */
 
-#define gm_vec2_comp(vec, vec2) gm_vec2_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
-#define gm_vec3_comp(vec, vec2) gm_vec3_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
-#define gm_vec4_comp(vec, vec2) gm_vec4_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
+#define gm_vector2_comp(vec, vec2) gm_vector2_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
+#define gm_vector3_comp(vec, vec2) gm_vector3_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
+#define gm_vector4_comp(vec, vec2) gm_vector4_comp_epsilon(vec, vec2, FLT_EPSILON) /* Compare two vectors. */
 
 #define gm_matrix3x3_comp(mat, mat2) gm_matrix3x3_comp_epsilon(mat, mat2, FLT_EPSILON) /* Compare two matrices. */
 #define gm_matrix4x4_comp(mat, mat2) gm_matrix4x4_comp_epsilon(mat, mat2, FLT_EPSILON) /* Compare two matrices. */
 
 extern gmboolean gm_comp_epsilon(gmfloat f1, gmfloat f2, gmfloat tolerance); /* Compare two floating point variables within a given range. */
 
-extern gmboolean gm_vec2_comp_epsilon(vector2 vec, vector2 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
-extern gmboolean gm_vec3_comp_epsilon(vector3 vec, vector3 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
-extern gmboolean gm_vec4_comp_epsilon(vector4 vec, vector4 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
+extern gmboolean gm_vector2_comp_epsilon(vector2 vec, vector2 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
+extern gmboolean gm_vector3_comp_epsilon(vector3 vec, vector3 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
+extern gmboolean gm_vector4_comp_epsilon(vector4 vec, vector4 vec2, gmfloat tolerance); /* Compare two vectors within a given range. */
 
 extern gmboolean gm_matrix3x3_comp_epsilon(matrix3x3 mat, matrix3x3 mat2, gmfloat tolerance); /* Compare two matrices within a given range. */
 extern gmboolean gm_matrix4x4_comp_epsilon(matrix4x4 mat, matrix4x4 mat2, gmfloat tolerance); /* Compare two matrices within a given range. */
