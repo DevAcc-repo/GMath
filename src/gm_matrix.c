@@ -39,7 +39,7 @@ void gm_matrix4x4vd(matrix4x4 dest, gmfloat val) {
 /* ---- Generate matrices ----
 Generate matrices using user given values */
 
-void gm_matrix4x4_orthographic(matrix4x4 dest, gmfloat left, gmfloat right, gmfloat bottom, gmfloat top, gmfloat near, gmfloat far) {
+void gm_matrix4x4_ortho(matrix4x4 dest, gmfloat left, gmfloat right, gmfloat bottom, gmfloat top, gmfloat near, gmfloat far) {
 	gm_matrix4x4_identity(dest);
 
 	dest[0] = 2.0 / (right - left);
